@@ -1,41 +1,63 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F7FA">
 
-    <!-- Chat messages -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"/>
+        android:padding="12dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never" />
 
-    <!-- Input section -->
     <LinearLayout
-        android:orientation="horizontal"
-        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:gravity="center_vertical">
 
         <EditText
             android:id="@+id/inputMessage"
-            android:hint="Ask your doubt..."
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="Ask your doubt..."
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:background="#F1F3F5"
+            android:textColor="#111111"
+            android:textColorHint="#808080"
+            android:textSize="14sp"
+            android:maxLines="4"
+            android:inputType="textMultiLine" />
 
         <Button
-            android:id="@+id/btnSend"
-            android:text="Send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
             android:id="@+id/btnMic"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:text="🎤"
+            android:textSize="18sp"
+            android:background="#E9ECEF"
+            android:textColor="#111111" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSend"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:minWidth="72dp"
+            android:text="Send"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/purple_500" />
 
     </LinearLayout>
 

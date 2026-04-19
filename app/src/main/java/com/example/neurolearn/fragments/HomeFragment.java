@@ -1,6 +1,7 @@
 package com.example.neurolearn.fragments;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,15 +10,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.neurolearn.R;
 
 public class HomeFragment extends Fragment {
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,39 +27,49 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize buttons
-        Button btnChat = view.findViewById(R.id.btnChat);
-        Button btnSummarize = view.findViewById(R.id.btnSummarize);
-        Button btnQuiz = view.findViewById(R.id.btnQuiz);
-        Button btnProfile = view.findViewById(R.id.btnProfile);
+        // CHAT (WORKING)
+        view.findViewById(R.id.cardChat).setOnClickListener(v ->
+                openFragment(new ChatFragment()));
 
-        // Navigation logic
-        btnChat.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new ChatFragment())
-                        .commit()
-        );
+        // SUMMARY (SAFE)
+        view.findViewById(R.id.cardSummary).setOnClickListener(v -> {
+            try {
+                openFragment(new SummarizerFragment());
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Summary coming soon", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        btnSummarize.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new SummarizerFragment())
-                        .commit()
-        );
+        // QUIZ (SAFE)
+        view.findViewById(R.id.cardQuiz).setOnClickListener(v -> {
+            try {
+                openFragment(new QuizFragment());
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Quiz coming soon", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        btnQuiz.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new QuizFragment())
-                        .commit()
-        );
+        // PROFILE (SAFE)
+        view.findViewById(R.id.cardProfile).setOnClickListener(v -> {
+            try {
+                openFragment(new ProfileFragment());
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Profile coming soon", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-        btnProfile.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new ProfileFragment())
-                        .commit()
-        );
+    private void openFragment(Fragment fragment) {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(
+                        android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right,
+                        android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right
+                )
+                .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

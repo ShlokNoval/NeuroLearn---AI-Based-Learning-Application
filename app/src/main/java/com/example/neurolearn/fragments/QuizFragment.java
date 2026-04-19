@@ -157,6 +157,9 @@ public class QuizFragment extends Fragment {
             }
         }
 
+        // 🔥 SHOW COLORS NOW
+        adapter.showResults();
+
         Toast.makeText(getContext(),
                 "Score: " + score + "/" + questionList.size(),
                 Toast.LENGTH_LONG).show();

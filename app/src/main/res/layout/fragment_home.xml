@@ -4,123 +4,191 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="@drawable/bg_gradient">
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- App Title -->
+        <!-- Title -->
         <TextView
-            android:text="NeuroLearn"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#2E7D32"
-            android:layout_marginBottom="20dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#1B5E20"
+            android:layout_marginBottom="24dp"/>
 
-        <!-- Grid Layout -->
-        <GridLayout
-            android:columnCount="2"
-            android:rowCount="3"
+        <!-- ROW 1 -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:useDefaultMargins="true">
+            android:orientation="horizontal">
 
-            <!-- CARD TEMPLATE -->
-
-            <!-- Chat -->
+            <!-- CHAT CARD -->
             <LinearLayout
                 android:id="@+id/cardChat"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@android:color/white"
-                android:elevation="4dp"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_columnWeight="1">
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/card_bg"
+                android:elevation="6dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:text="🤖"
-                    android:textSize="28sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icon_chat"
+                    android:textSize="32sp"/>
 
                 <TextView
-                    android:text="Ask Doubt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ask_doubt"
                     android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chat_desc"
+                    android:textSize="12sp"
+                    android:textColor="#777777"
+                    android:layout_marginTop="4dp"/>
 
             </LinearLayout>
 
-            <!-- Summarizer -->
+            <!-- SUMMARY CARD -->
             <LinearLayout
                 android:id="@+id/cardSummary"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@android:color/white"
-                android:elevation="4dp"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_columnWeight="1">
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/card_bg"
+                android:elevation="6dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:text="📝"
-                    android:textSize="28sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icon_summary"
+                    android:textSize="32sp"/>
 
                 <TextView
-                    android:text="Summarize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/summarize"
                     android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/summary_desc"
+                    android:textSize="12sp"
+                    android:textColor="#777777"
+                    android:layout_marginTop="4dp"/>
 
             </LinearLayout>
 
-            <!-- Quiz -->
+        </LinearLayout>
+
+        <!-- ROW 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- QUIZ CARD -->
             <LinearLayout
                 android:id="@+id/cardQuiz"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@android:color/white"
-                android:elevation="4dp"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_columnWeight="1">
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/card_bg"
+                android:elevation="6dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:text="🧠"
-                    android:textSize="28sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icon_quiz"
+                    android:textSize="32sp"/>
 
                 <TextView
-                    android:text="Quiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quiz"
                     android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quiz_desc"
+                    android:textSize="12sp"
+                    android:textColor="#777777"
+                    android:layout_marginTop="4dp"/>
 
             </LinearLayout>
 
-            <!-- Profile -->
+            <!-- PROFILE CARD -->
             <LinearLayout
                 android:id="@+id/cardProfile"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@android:color/white"
-                android:elevation="4dp"
                 android:layout_width="0dp"
-                android:layout_height="140dp"
-                android:layout_columnWeight="1">
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/card_bg"
+                android:elevation="6dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:text="👤"
-                    android:textSize="28sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icon_profile"
+                    android:textSize="32sp"/>
 
                 <TextView
-                    android:text="Profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile"
                     android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_desc"
+                    android:textSize="12sp"
+                    android:textColor="#777777"
+                    android:layout_marginTop="4dp"/>
 
             </LinearLayout>
 
-        </GridLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

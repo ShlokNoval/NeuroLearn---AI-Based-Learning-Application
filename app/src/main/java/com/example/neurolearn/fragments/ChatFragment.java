@@ -35,7 +35,8 @@ public class ChatFragment extends Fragment {
 
     private static final int REQUEST_SPEECH = 100;
 
-    public ChatFragment() {}
+    public ChatFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,58 +44,57 @@ public class ChatFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        // Initialize views
         recyclerView = view.findViewById(R.id.recyclerView);
         inputMessage = view.findViewById(R.id.inputMessage);
         btnSend = view.findViewById(R.id.btnSend);
-        btnMic = view.findViewById(R.id.btnMic); // 🎤
+        btnMic = view.findViewById(R.id.btnMic);
 
-        // Initialize message list
         messages = new ArrayList<>();
-
-        // Setup adapter
         adapter = new ChatAdapter(messages);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Send button
         btnSend.setOnClickListener(v -> sendMessage());
-
-        // Mic button
         btnMic.setOnClickListener(v -> startVoiceInput());
 
         return view;
     }
 
     private void sendMessage() {
-
         String userText = inputMessage.getText().toString().trim();
 
-        if (userText.isEmpty()) return;
+        if (userText.isEmpty()) {
+            return;
+        }
 
-        // Add user message
         messages.add(new ChatMessage(userText, true));
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemInserted(messages.size() - 1);
         recyclerView.scrollToPosition(messages.size() - 1);
 
         inputMessage.setText("");
 
-        // Typing message
         ChatMessage typingMessage = new ChatMessage("Typing...", false);
         messages.add(typingMessage);
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemInserted(messages.size() - 1);
         recyclerView.scrollToPosition(messages.size() - 1);
 
-        // AI call
         GroqHelper.askQuestion(userText, new GroqHelper.Callback() {
             @Override
             public void onResponse(String response) {
                 if (getActivity() == null) return;
 
                 getActivity().runOnUiThread(() -> {
-                    messages.remove(typingMessage);
+                    int typingIndex = messages.indexOf(typingMessage);
+                    if (typingIndex != -1) {
+                        messages.remove(typingIndex);
+                        adapter.notifyItemRemoved(typingIndex);
+                    }
+
                     messages.add(new ChatMessage(response, false));
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemInserted(messages.size() - 1);
                     recyclerView.scrollToPosition(messages.size() - 1);
                 });
             }
@@ -104,17 +104,21 @@ public class ChatFragment extends Fragment {
                 if (getActivity() == null) return;
 
                 getActivity().runOnUiThread(() -> {
-                    messages.remove(typingMessage);
+                    int typingIndex = messages.indexOf(typingMessage);
+                    if (typingIndex != -1) {
+                        messages.remove(typingIndex);
+                        adapter.notifyItemRemoved(typingIndex);
+                    }
+
                     messages.add(new ChatMessage("Error: " + error, false));
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemInserted(messages.size() - 1);
+                    recyclerView.scrollToPosition(messages.size() - 1);
                 });
             }
         });
     }
 
-    // 🎤 VOICE INPUT
     private void startVoiceInput() {
-
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -128,18 +132,16 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    // 🎤 RESULT HANDLER
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_SPEECH && resultCode == Activity.RESULT_OK && data != null) {
-
-            ArrayList<String> result =
-                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             if (result != null && !result.isEmpty()) {
                 inputMessage.setText(result.get(0));
+                inputMessage.setSelection(inputMessage.getText().length());
             }
         }
     }

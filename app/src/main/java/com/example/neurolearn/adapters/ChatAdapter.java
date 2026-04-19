@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
-    private List<ChatMessage> messages;
+    private final List<ChatMessage> messages;
 
     public ChatAdapter(List<ChatMessage> messages) {
         this.messages = messages;
@@ -29,7 +29,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view;
 
         if (viewType == 1) {
@@ -54,7 +53,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView textMessage;
 
         public ViewHolder(@NonNull View itemView) {
