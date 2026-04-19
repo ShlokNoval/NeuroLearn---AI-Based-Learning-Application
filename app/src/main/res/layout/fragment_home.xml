@@ -1,53 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F7FA">
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Title -->
+        <!-- App Title -->
         <TextView
             android:text="NeuroLearn"
-            android:textSize="26sp"
+            android:textSize="28sp"
             android:textStyle="bold"
+            android:textColor="#2E7D32"
             android:layout_marginBottom="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <!-- Ask Doubt -->
-        <Button
-            android:id="@+id/btnChat"
-            android:text="🤖 Ask Doubt"
+        <!-- Grid Layout -->
+        <GridLayout
+            android:columnCount="2"
+            android:rowCount="3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:useDefaultMargins="true">
 
-        <!-- Summarize -->
-        <Button
-            android:id="@+id/btnSummarize"
-            android:text="📝 Summarize Notes"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <!-- CARD TEMPLATE -->
 
-        <!-- Quiz -->
-        <Button
-            android:id="@+id/btnQuiz"
-            android:text="🧠 Generate Quiz"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <!-- Chat -->
+            <LinearLayout
+                android:id="@+id/cardChat"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="@android:color/white"
+                android:elevation="4dp"
+                android:layout_width="0dp"
+                android:layout_height="140dp"
+                android:layout_columnWeight="1">
 
-        <!-- Profile -->
-        <Button
-            android:id="@+id/btnProfile"
-            android:text="👤 Profile"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="🤖"
+                    android:textSize="28sp"/>
+
+                <TextView
+                    android:text="Ask Doubt"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+            <!-- Summarizer -->
+            <LinearLayout
+                android:id="@+id/cardSummary"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="@android:color/white"
+                android:elevation="4dp"
+                android:layout_width="0dp"
+                android:layout_height="140dp"
+                android:layout_columnWeight="1">
+
+                <TextView
+                    android:text="📝"
+                    android:textSize="28sp"/>
+
+                <TextView
+                    android:text="Summarize"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+            <!-- Quiz -->
+            <LinearLayout
+                android:id="@+id/cardQuiz"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="@android:color/white"
+                android:elevation="4dp"
+                android:layout_width="0dp"
+                android:layout_height="140dp"
+                android:layout_columnWeight="1">
+
+                <TextView
+                    android:text="🧠"
+                    android:textSize="28sp"/>
+
+                <TextView
+                    android:text="Quiz"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+            <!-- Profile -->
+            <LinearLayout
+                android:id="@+id/cardProfile"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="@android:color/white"
+                android:elevation="4dp"
+                android:layout_width="0dp"
+                android:layout_height="140dp"
+                android:layout_columnWeight="1">
+
+                <TextView
+                    android:text="👤"
+                    android:textSize="28sp"/>
+
+                <TextView
+                    android:text="Profile"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+        </GridLayout>
 
     </LinearLayout>
 

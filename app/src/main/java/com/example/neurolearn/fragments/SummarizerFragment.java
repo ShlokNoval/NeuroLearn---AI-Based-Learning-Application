@@ -10,21 +10,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.neurolearn.R;
 import com.example.neurolearn.utils.GroqHelper;
 
+import java.io.InputStream;
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
+
 public class SummarizerFragment extends Fragment {
 
     private EditText inputText;
-    private Button btnSummarize, btnUploadPDF;
+    private Button btnSummarize, btnUploadPDF, btnGenerateQuizFromPDF;
     private TextView outputText;
 
     private static final int PICK_PDF = 1;
 
     public SummarizerFragment() {}
 
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,14 +42,17 @@ public class SummarizerFragment extends Fragment {
         inputText = view.findViewById(R.id.inputText);
         btnSummarize = view.findViewById(R.id.btnSummarize);
         btnUploadPDF = view.findViewById(R.id.btnUploadPDF);
+        btnGenerateQuizFromPDF = view.findViewById(R.id.btnGenerateQuizFromPDF);
         outputText = view.findViewById(R.id.outputText);
 
         btnSummarize.setOnClickListener(v -> summarizeText());
         btnUploadPDF.setOnClickListener(v -> pickPDF());
+        btnGenerateQuizFromPDF.setOnClickListener(v -> generateQuizFromPDF());
 
         return view;
     }
 
+    // 🧠 SUMMARIZE
     private void summarizeText() {
 
         String notes = inputText.getText().toString().trim();
@@ -53,25 +64,23 @@ public class SummarizerFragment extends Fragment {
 
         outputText.setText("⏳ Summarizing...");
 
+        if (notes.length() > 4000) {
+            notes = notes.substring(0, 4000);
+        }
+
         String prompt = "Summarize the following content into simple bullet points:\n" + notes;
 
         GroqHelper.askQuestion(prompt, new GroqHelper.Callback() {
             @Override
             public void onResponse(String response) {
                 if (getActivity() == null) return;
-
-                getActivity().runOnUiThread(() -> {
-                    outputText.setText(response);
-                });
+                getActivity().runOnUiThread(() -> outputText.setText(response));
             }
 
             @Override
             public void onError(String error) {
                 if (getActivity() == null) return;
-
-                getActivity().runOnUiThread(() -> {
-                    outputText.setText("Error: " + error);
-                });
+                getActivity().runOnUiThread(() -> outputText.setText("Error: " + error));
             }
         });
     }
@@ -93,9 +102,103 @@ public class SummarizerFragment extends Fragment {
             Uri pdfUri = data.getData();
 
             if (pdfUri != null) {
-                inputText.setText("PDF Selected:\n" + pdfUri.getLastPathSegment());
-                Toast.makeText(getContext(), "PDF Selected", Toast.LENGTH_SHORT).show();
+                extractTextFromPDF(pdfUri);
             }
         }
+    }
+
+    // 📖 EXTRACT TEXT (BACKGROUND THREAD)
+    private void extractTextFromPDF(Uri uri) {
+
+        outputText.setText("⏳ Reading PDF...");
+
+        new Thread(() -> {
+            try {
+                InputStream inputStream = requireContext()
+                        .getContentResolver()
+                        .openInputStream(uri);
+
+                PdfReader reader = new PdfReader(inputStream);
+                PdfDocument pdfDoc = new PdfDocument(reader);
+
+                StringBuilder text = new StringBuilder();
+
+                for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
+                    text.append(PdfTextExtractor.getTextFromPage(pdfDoc.getPage(i)));
+                }
+
+                pdfDoc.close();
+                inputStream.close();
+
+                String extracted = text.toString();
+
+                if (extracted.length() > 4000) {
+                    extracted = extracted.substring(0, 4000);
+                }
+
+                if (getActivity() == null) return;
+
+                String finalText = extracted;
+
+                getActivity().runOnUiThread(() -> {
+                    inputText.setText(finalText);
+                    outputText.setText("✅ PDF loaded. You can now summarize or generate quiz.");
+                    Toast.makeText(getContext(), "PDF Loaded!", Toast.LENGTH_SHORT).show();
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                if (getActivity() == null) return;
+
+                getActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "Failed to read PDF", Toast.LENGTH_SHORT).show()
+                );
+            }
+        }).start();
+    }
+
+    // 🎯 GENERATE QUIZ FROM PDF
+    private void generateQuizFromPDF() {
+
+        String text = inputText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(text)) {
+            Toast.makeText(getContext(), "Upload PDF first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        outputText.setText("⏳ Generating quiz from PDF...");
+
+        if (text.length() > 4000) {
+            text = text.substring(0, 4000);
+        }
+
+        String prompt = "Generate 5 MCQ questions from the following content.\n" +
+                "Format strictly:\n" +
+                "Q1. Question\nA) Option\nB) Option\nC) Option\nD) Option\nAnswer: A\n\n" +
+                "Content:\n" + text;
+
+        GroqHelper.askQuestion(prompt, new GroqHelper.Callback() {
+            @Override
+            public void onResponse(String response) {
+
+                if (getActivity() == null) return;
+
+                getActivity().runOnUiThread(() -> {
+                    outputText.setText(response);
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+
+                if (getActivity() == null) return;
+
+                getActivity().runOnUiThread(() -> {
+                    outputText.setText("Error: " + error);
+                });
+            }
+        });
     }
 }

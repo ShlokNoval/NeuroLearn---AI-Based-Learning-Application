@@ -1,11 +1,15 @@
 package com.example.neurolearn.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,15 +22,18 @@ import com.example.neurolearn.utils.GroqHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private EditText inputMessage;
-    private Button btnSend;
+    private Button btnSend, btnMic;
 
     private List<ChatMessage> messages;
     private ChatAdapter adapter;
+
+    private static final int REQUEST_SPEECH = 100;
 
     public ChatFragment() {}
 
@@ -40,6 +47,7 @@ public class ChatFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         inputMessage = view.findViewById(R.id.inputMessage);
         btnSend = view.findViewById(R.id.btnSend);
+        btnMic = view.findViewById(R.id.btnMic); // 🎤
 
         // Initialize message list
         messages = new ArrayList<>();
@@ -49,8 +57,11 @@ public class ChatFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Send button click
+        // Send button
         btnSend.setOnClickListener(v -> sendMessage());
+
+        // Mic button
+        btnMic.setOnClickListener(v -> startVoiceInput());
 
         return view;
     }
@@ -68,26 +79,21 @@ public class ChatFragment extends Fragment {
 
         inputMessage.setText("");
 
-        // 👉 STEP 1: Add "Typing..." message
+        // Typing message
         ChatMessage typingMessage = new ChatMessage("Typing...", false);
         messages.add(typingMessage);
         adapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(messages.size() - 1);
 
-        // 👉 STEP 2: Call AI
+        // AI call
         GroqHelper.askQuestion(userText, new GroqHelper.Callback() {
             @Override
             public void onResponse(String response) {
                 if (getActivity() == null) return;
 
                 getActivity().runOnUiThread(() -> {
-
-                    // Remove "Typing..."
                     messages.remove(typingMessage);
-
-                    // Add real AI response
                     messages.add(new ChatMessage(response, false));
-
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(messages.size() - 1);
                 });
@@ -98,13 +104,43 @@ public class ChatFragment extends Fragment {
                 if (getActivity() == null) return;
 
                 getActivity().runOnUiThread(() -> {
-
                     messages.remove(typingMessage);
                     messages.add(new ChatMessage("Error: " + error, false));
-
                     adapter.notifyDataSetChanged();
                 });
             }
         });
+    }
+
+    // 🎤 VOICE INPUT
+    private void startVoiceInput() {
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your question...");
+
+        try {
+            startActivityForResult(intent, REQUEST_SPEECH);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Voice not supported", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // 🎤 RESULT HANDLER
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_SPEECH && resultCode == Activity.RESULT_OK && data != null) {
+
+            ArrayList<String> result =
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            if (result != null && !result.isEmpty()) {
+                inputMessage.setText(result.get(0));
+            }
+        }
     }
 }

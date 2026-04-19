@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.neurolearn">
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NeuroLearn"
         tools:targetApi="31">
+
 
         <!-- Splash (Launcher) -->
         <activity
