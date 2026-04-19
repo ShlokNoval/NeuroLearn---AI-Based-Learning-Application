@@ -1,4 +1,4 @@
-package com.example.neurolearn.activities;
+package com.example.neurolearn;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.neurolearn.MainActivity;
 import com.example.neurolearn.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;

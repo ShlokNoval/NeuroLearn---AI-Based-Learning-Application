@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.neurolearn">
 
     <application
         android:allowBackup="true"
@@ -15,7 +17,7 @@
 
         <!-- Splash (Launcher) -->
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,17 +27,17 @@
 
         <!-- Login -->
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="true" />
 
         <!-- Signup -->
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name=".SignUpActivity"
             android:exported="true" />
 
         <!-- Main -->
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".MainActivity"
             android:exported="true" />
 
     </application>

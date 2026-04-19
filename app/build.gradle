@@ -3,7 +3,6 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-/* ✅ MOVE THIS HERE (AFTER plugins) */
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 
@@ -11,8 +10,7 @@ if (localPropertiesFile.exists()) {
     localProperties.load(new FileInputStream(localPropertiesFile))
 }
 
-def GEMINI_API_KEY = localProperties.getProperty("GEMINI_API_KEY") ?: ""
-
+def GROQ_API_KEY = localProperties.getProperty("GROQ_API_KEY") ?: ""
 
 android {
     namespace 'com.example.neurolearn'
@@ -27,7 +25,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "GEMINI_API_KEY", "\"${GEMINI_API_KEY}\""
+        buildConfigField "String", "GROQ_API_KEY", "\"${GROQ_API_KEY}\""
     }
 
     buildFeatures {
@@ -48,7 +46,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -56,7 +53,9 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth:22.3.1'
     implementation 'com.google.firebase:firebase-firestore:24.10.0'
-    implementation 'com.google.ai.client.generativeai:generativeai:0.6.0'
+
+    // ✅ Groq uses OkHttp only — no Gemini SDK needed
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

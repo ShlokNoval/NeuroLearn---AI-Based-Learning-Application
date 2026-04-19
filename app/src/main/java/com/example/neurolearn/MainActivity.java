@@ -1,14 +1,13 @@
-package com.example.neurolearn.activities;
+package com.example.neurolearn;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.neurolearn.R;
-import com.example.neurolearn.fragments.ChatFragment;
+import com.example.neurolearn.fragments.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,11 +19,11 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Load ChatFragment
+        // Load HomeFragment FIRST
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainer, new ChatFragment())
+                    .replace(R.id.fragmentContainer, new HomeFragment())
                     .commit();
         }
 

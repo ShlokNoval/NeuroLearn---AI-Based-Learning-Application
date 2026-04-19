@@ -1,4 +1,4 @@
-package com.example.neurolearn.activities;
+package com.example.neurolearn;
 
 import android.content.Intent;
 import android.os.Bundle;

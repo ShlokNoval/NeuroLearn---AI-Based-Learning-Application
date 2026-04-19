@@ -1,13 +1,18 @@
 package com.example.neurolearn.fragments;
 
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.neurolearn.R;
-import com.example.neurolearn.utils.GeminiHelper;
+import com.example.neurolearn.utils.GroqHelper;
 
 public class ChatFragment extends Fragment {
 
@@ -41,13 +46,13 @@ public class ChatFragment extends Fragment {
 
         tvChat.append("\n\nYou: " + question);
 
-        GeminiHelper.askQuestion(question, new GeminiHelper.Callback() {
+        GroqHelper.askQuestion(question, new GroqHelper.Callback() {
             @Override
             public void onResponse(String text) {
-                requireActivity().runOnUiThread(() ->
-                        tvChat.append("\nAI: " + text);
-
-                scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
+                requireActivity().runOnUiThread(() -> {
+                    tvChat.append("\nAI: " + text);
+                    scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
+                });
             }
 
             @Override
