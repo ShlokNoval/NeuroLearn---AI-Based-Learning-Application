@@ -1,28 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Input -->
     <EditText
         android:id="@+id/inputText"
-        android:hint="Paste topic or notes"
-        android:minHeight="120dp"
-        android:gravity="top"
+        android:hint="Enter topic or notes"
+        android:minHeight="48dp"
+        android:padding="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <!-- Generate Button -->
     <Button
         android:id="@+id/btnGenerate"
         android:text="Generate Quiz"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/outputQuiz"
-        android:paddingTop="16dp"
-        android:textSize="16sp"
+    <!-- Questions List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerQuiz"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <!-- Submit -->
+    <Button
+        android:id="@+id/btnSubmit"
+        android:text="Submit Quiz"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
