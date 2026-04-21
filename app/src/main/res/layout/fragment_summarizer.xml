@@ -62,12 +62,6 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/btnGenerateQuizFromPDF"
-            android:text="Generate Quiz from PDF"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <!-- Output -->
         <TextView

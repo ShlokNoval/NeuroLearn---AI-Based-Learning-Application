@@ -189,9 +189,50 @@ public class QuizFragment extends Fragment {
         // 🔥 SHOW COLORS NOW
         adapter.showResults();
 
-        Toast.makeText(getContext(),
-                "Score: " + score + "/" + questionList.size(),
-                Toast.LENGTH_LONG).show();
+        showAnimatedScoreDialog(score, questionList.size());
+    }
+
+    private void showAnimatedScoreDialog(int score, int total) {
+        if (getActivity() == null) return;
+        
+        android.app.Dialog dialog = new android.app.Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog_score);
+        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        
+        android.widget.TextView tvScore = dialog.findViewById(R.id.tvScore);
+        android.widget.TextView tvMessage = dialog.findViewById(R.id.tvMessage);
+        Button btnClose = dialog.findViewById(R.id.btnCloseDialog);
+        
+        tvScore.setText(score + " / " + total);
+        
+        if (score == total) {
+            tvMessage.setText("Perfect Score! 🌟");
+        } else if (score >= total / 2.0) {
+            tvMessage.setText("Great Job! 👍");
+        } else {
+            tvMessage.setText("Keep Practicing! 📚");
+        }
+        
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+        
+        // Cool scale animation when dialog shows up
+        dialog.setOnShowListener(d -> {
+            android.view.View contentView = dialog.findViewById(android.R.id.content);
+            if (contentView != null) {
+                contentView.setScaleX(0.5f);
+                contentView.setScaleY(0.5f);
+                contentView.setAlpha(0f);
+                contentView.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .alpha(1f)
+                        .setDuration(400)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator())
+                        .start();
+            }
+        });
+        
+        dialog.show();
     }
 
     @Override
@@ -223,8 +264,8 @@ public class QuizFragment extends Fragment {
                 inputStream.close();
 
                 String extracted = text.toString();
-                if (extracted.length() > 4000) {
-                    extracted = extracted.substring(0, 4000);
+                if (extracted.length() > 20000) {
+                    extracted = extracted.substring(0, 20000);
                 }
 
                 if (getActivity() == null) return;

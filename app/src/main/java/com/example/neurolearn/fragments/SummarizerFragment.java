@@ -25,7 +25,7 @@ import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 public class SummarizerFragment extends Fragment {
 
     private EditText inputText;
-    private Button btnSummarize, btnUploadPDF, btnGenerateQuizFromPDF;
+    private Button btnSummarize, btnUploadPDF;
     private android.widget.ImageButton btnBack;
     private TextView outputText;
 
@@ -43,7 +43,6 @@ public class SummarizerFragment extends Fragment {
         inputText = view.findViewById(R.id.inputText);
         btnSummarize = view.findViewById(R.id.btnSummarize);
         btnUploadPDF = view.findViewById(R.id.btnUploadPDF);
-        btnGenerateQuizFromPDF = view.findViewById(R.id.btnGenerateQuizFromPDF);
         outputText = view.findViewById(R.id.outputText);
         btnBack = view.findViewById(R.id.btnBack);
 
@@ -57,7 +56,6 @@ public class SummarizerFragment extends Fragment {
 
         btnSummarize.setOnClickListener(v -> summarizeText());
         btnUploadPDF.setOnClickListener(v -> pickPDF());
-        btnGenerateQuizFromPDF.setOnClickListener(v -> generateQuizFromPDF());
 
         return view;
     }
@@ -74,8 +72,8 @@ public class SummarizerFragment extends Fragment {
 
         outputText.setText("⏳ Summarizing...");
 
-        if (notes.length() > 4000) {
-            notes = notes.substring(0, 4000);
+        if (notes.length() > 20000) {
+            notes = notes.substring(0, 20000);
         }
 
         String prompt = "Summarize the following content into simple bullet points:\n" + notes;
@@ -142,8 +140,8 @@ public class SummarizerFragment extends Fragment {
 
                 String extracted = text.toString();
 
-                if (extracted.length() > 4000) {
-                    extracted = extracted.substring(0, 4000);
+                if (extracted.length() > 20000) {
+                    extracted = extracted.substring(0, 20000);
                 }
 
                 if (getActivity() == null) return;
@@ -168,47 +166,4 @@ public class SummarizerFragment extends Fragment {
         }).start();
     }
 
-    // 🎯 GENERATE QUIZ FROM PDF
-    private void generateQuizFromPDF() {
-
-        String text = inputText.getText().toString().trim();
-
-        if (TextUtils.isEmpty(text)) {
-            Toast.makeText(getContext(), "Upload PDF first", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        outputText.setText("⏳ Generating quiz from PDF...");
-
-        if (text.length() > 4000) {
-            text = text.substring(0, 4000);
-        }
-
-        String prompt = "Generate 5 MCQ questions from the following content.\n" +
-                "Format strictly:\n" +
-                "Q1. Question\nA) Option\nB) Option\nC) Option\nD) Option\nAnswer: A\n\n" +
-                "Content:\n" + text;
-
-        GroqHelper.askQuestion(prompt, new GroqHelper.Callback() {
-            @Override
-            public void onResponse(String response) {
-
-                if (getActivity() == null) return;
-
-                getActivity().runOnUiThread(() -> {
-                    outputText.setText(response);
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-
-                if (getActivity() == null) return;
-
-                getActivity().runOnUiThread(() -> {
-                    outputText.setText("Error: " + error);
-                });
-            }
-        });
-    }
 }
