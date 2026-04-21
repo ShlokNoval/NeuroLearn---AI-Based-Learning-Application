@@ -37,5 +37,43 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
+
+        android.widget.TextView tvUserName = view.findViewById(R.id.tvUserName);
+        android.widget.TextView tvUserEmail = view.findViewById(R.id.tvUserEmail);
+        android.widget.Button btnLogout = view.findViewById(R.id.btnLogout);
+
+        com.google.firebase.auth.FirebaseAuth auth = com.google.firebase.auth.FirebaseAuth.getInstance();
+        com.google.firebase.auth.FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
+            db.collection("users").document(uid).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists() && getActivity() != null) {
+                            String name = documentSnapshot.getString("name");
+                            String email = documentSnapshot.getString("email");
+                            tvUserName.setText(name != null ? name : "Student User");
+                            tvUserEmail.setText(email != null ? email : "ID: NEURO-99210");
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        if (getActivity() != null) {
+                            android.widget.Toast.makeText(getContext(), "Failed to load profile", android.widget.Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    auth.signOut();
+                    android.content.Intent intent = new android.content.Intent(getActivity(), com.example.neurolearn.LoginActivity.class);
+                    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            });
+        }
     }
 }

@@ -36,6 +36,11 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignup = findViewById(R.id.btnSignup);
 
         btnSignup.setOnClickListener(v -> registerUser());
+
+        TextView tvAlreadyHaveAccount = findViewById(R.id.tvAlreadyHaveAccount);
+        if (tvAlreadyHaveAccount != null) {
+            tvAlreadyHaveAccount.setOnClickListener(v -> finish());
+        }
     }
 
     private void registerUser() {

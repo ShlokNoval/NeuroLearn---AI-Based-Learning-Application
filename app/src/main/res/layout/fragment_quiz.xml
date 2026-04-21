@@ -35,11 +35,19 @@
     <!-- Input -->
     <EditText
         android:id="@+id/inputText"
-        android:hint="Enter topic or notes"
+        android:hint="Enter topic or upload document"
         android:minHeight="48dp"
         android:padding="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <!-- Upload Button -->
+    <Button
+        android:id="@+id/btnUploadPDF"
+        android:text="Upload PDF Notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
 
     <!-- Generate Button -->
     <Button

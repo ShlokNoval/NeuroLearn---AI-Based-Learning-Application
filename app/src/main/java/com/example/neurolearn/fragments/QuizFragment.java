@@ -20,13 +20,23 @@ import com.example.neurolearn.adapters.QuizAdapter;
 import com.example.neurolearn.models.QuizQuestion;
 import com.example.neurolearn.utils.GroqHelper;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
+
 public class QuizFragment extends Fragment {
 
+    private static final int PICK_PDF = 1;
     private EditText inputText;
-    private Button btnGenerate, btnSubmit;
+    private Button btnUploadPDF, btnGenerate, btnSubmit;
     private android.widget.ImageButton btnBack;
     private RecyclerView recyclerQuiz;
 
@@ -48,6 +58,7 @@ public class QuizFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         inputText = view.findViewById(R.id.inputText);
+        btnUploadPDF = view.findViewById(R.id.btnUploadPDF);
         btnGenerate = view.findViewById(R.id.btnGenerate);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         recyclerQuiz = view.findViewById(R.id.recyclerQuiz);
@@ -58,6 +69,14 @@ public class QuizFragment extends Fragment {
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
+            });
+        }
+
+        if (btnUploadPDF != null) {
+            btnUploadPDF.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("application/pdf");
+                startActivityForResult(intent, PICK_PDF);
             });
         }
 
@@ -173,5 +192,57 @@ public class QuizFragment extends Fragment {
         Toast.makeText(getContext(),
                 "Score: " + score + "/" + questionList.size(),
                 Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_PDF && resultCode == Activity.RESULT_OK && data != null) {
+            Uri pdfUri = data.getData();
+            if (pdfUri != null) {
+                extractTextFromPDF(pdfUri);
+            }
+        }
+    }
+
+    private void extractTextFromPDF(Uri uri) {
+        Toast.makeText(getContext(), "Reading PDF...", Toast.LENGTH_SHORT).show();
+
+        new Thread(() -> {
+            try {
+                InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
+                PdfReader reader = new PdfReader(inputStream);
+                PdfDocument pdfDoc = new PdfDocument(reader);
+                StringBuilder text = new StringBuilder();
+
+                for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
+                    text.append(PdfTextExtractor.getTextFromPage(pdfDoc.getPage(i)));
+                }
+
+                pdfDoc.close();
+                inputStream.close();
+
+                String extracted = text.toString();
+                if (extracted.length() > 4000) {
+                    extracted = extracted.substring(0, 4000);
+                }
+
+                if (getActivity() == null) return;
+                String finalText = extracted;
+
+                getActivity().runOnUiThread(() -> {
+                    inputText.setText(finalText);
+                    Toast.makeText(getContext(), "PDF Loaded! You can now generate the quiz.", Toast.LENGTH_SHORT).show();
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), "Failed to read PDF", Toast.LENGTH_SHORT).show()
+                    );
+                }
+            }
+        }).start();
     }
 }
