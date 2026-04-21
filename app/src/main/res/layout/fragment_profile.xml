@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Agri User"
+                android:text="Student User"
                 android:textColor="#333333"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -70,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID: AGRI-99210"
+                android:text="ID: NEURO-99210"
                 android:textColor="#777777" />
 
             <!-- Settings Options to fill space -->

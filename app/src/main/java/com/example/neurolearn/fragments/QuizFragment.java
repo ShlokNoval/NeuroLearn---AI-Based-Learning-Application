@@ -27,6 +27,7 @@ public class QuizFragment extends Fragment {
 
     private EditText inputText;
     private Button btnGenerate, btnSubmit;
+    private android.widget.ImageButton btnBack;
     private RecyclerView recyclerQuiz;
 
     private List<QuizQuestion> questionList = new ArrayList<>();
@@ -50,6 +51,15 @@ public class QuizFragment extends Fragment {
         btnGenerate = view.findViewById(R.id.btnGenerate);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         recyclerQuiz = view.findViewById(R.id.recyclerQuiz);
+        btnBack = view.findViewById(R.id.btnBack);
+
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+        }
 
         // Setup RecyclerView
         adapter = new QuizAdapter(questionList);

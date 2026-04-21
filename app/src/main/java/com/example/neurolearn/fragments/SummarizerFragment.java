@@ -26,6 +26,7 @@ public class SummarizerFragment extends Fragment {
 
     private EditText inputText;
     private Button btnSummarize, btnUploadPDF, btnGenerateQuizFromPDF;
+    private android.widget.ImageButton btnBack;
     private TextView outputText;
 
     private static final int PICK_PDF = 1;
@@ -44,6 +45,15 @@ public class SummarizerFragment extends Fragment {
         btnUploadPDF = view.findViewById(R.id.btnUploadPDF);
         btnGenerateQuizFromPDF = view.findViewById(R.id.btnGenerateQuizFromPDF);
         outputText = view.findViewById(R.id.outputText);
+        btnBack = view.findViewById(R.id.btnBack);
+
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+        }
 
         btnSummarize.setOnClickListener(v -> summarizeText());
         btnUploadPDF.setOnClickListener(v -> pickPDF());

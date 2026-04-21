@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Market Connectivity"
+                android:text="Student Dashboard"
                 android:textColor="#666666" />
         </LinearLayout>
 
@@ -151,7 +151,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Market Insights"
+                android:text="Course Recommendations"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="24dp"
                 android:textSize="18sp"
@@ -175,8 +175,8 @@
                         app:cardCornerRadius="15dp"
                         app:cardElevation="1dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tomato" android:textColor="#777777"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹40/kg" android:textStyle="bold" android:textColor="#1B5E20" android:textSize="18sp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Java Programming" android:textColor="#777777"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enrolled" android:textStyle="bold" android:textColor="#1B5E20" android:textSize="18sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                     <androidx.cardview.widget.CardView
@@ -186,8 +186,8 @@
                         app:cardCornerRadius="15dp"
                         app:cardElevation="1dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Potato" android:textColor="#777777"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹22/kg" android:textStyle="bold" android:textColor="#1B5E20" android:textSize="18sp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Android Dev" android:textColor="#777777"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start Course" android:textStyle="bold" android:textColor="#1B5E20" android:textSize="18sp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
@@ -206,8 +206,8 @@
                     android:padding="20dp"
                     android:orientation="vertical">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recent Activity" android:textStyle="bold" android:textSize="16sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="• Checked Tomato prices in Nashik" android:layout_marginTop="10dp" android:textColor="#666666"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="• New buyer request from Mumbai" android:layout_marginTop="5dp" android:textColor="#666666"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="• Checked Java Notes" android:layout_marginTop="10dp" android:textColor="#666666"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="• New Quiz available" android:layout_marginTop="5dp" android:textColor="#666666"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
